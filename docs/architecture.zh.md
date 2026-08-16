@@ -8,9 +8,11 @@
 
 ## Cordis
 
-[Cordis](cordis-primer.md) 是 dsh 底层的框架：插件向共享上下文贡献服务、类型化事件和可逆的副作用。产品的每一部分都是插件，包括模型适配器、工具注册表、会话日志，以及 agent loop（智能体循环）本身，因此每一部分都可以从配置替换。
+[Cordis](cordis-primer.md) 是 dsh 底层的框架：插件向共享上下文贡献服务、类型化事件和可逆的副作用。产品中位于引导胶水层之上的每一部分都是插件，包括模型适配器、工具注册表、会话日志，以及 agent loop（智能体循环）本身，因此每一部分都可以从配置替换。
 
-不存在需要打补丁的特权内核：扩展 dsh 的方式是把插件挂载到其他插件旁边，而各项注册都是副作用，会在其插件卸载时撤销。
+扩展 dsh 的方式是把插件挂载到其他插件旁边，而各项注册都是副作用，会在其插件卸载时撤销。副作用回收的是注册项，而非外部资源：持有进程、终端、工作线程或远程沙箱的插件，需在自己的 disposer 中等待它们静止（[防御性模式](defensive-patterns.md)）。
+
+其下的引导胶水层只能从源码而非配置改动：应用 bin、`app-boot` 的环境、home 与配置解析及其 fail-loud 守卫、Cordis Loader 及它挂载的根 `include` 与 `group` 内建项，以及 vendored Cordis 本身。
 
 ## Profile 与组合包
 
@@ -58,7 +60,7 @@ dsh --profile web --dump-config
 
 - **会话事件**是追加到日志并通过 `session/event` 广播的持久事实。当某个事实必须在重新加载后仍然存在时，使用它。
 - **Agent 事件**（`agent/*`）携带活跃 `Agent`：inbox、步骤、状态、请求、验证、续跑。要观察或拦截进行中的工作时，使用它。
-- **能力事件**无需导入循环即可向某个 seam（`fs/*`、`tools/*`、`telemetry/*`）附加策略和适配器。
+- **能力事件**无需导入循环即可向某个 seam（`fs/*`、`tools/*`、`session-telemetry/*`）附加策略和适配器。
 
 [事件映射](event-producer-consumer.md)列出每个事件的生产方与消费方。
 
@@ -97,13 +99,15 @@ turn/end
 
 会话日志是模型所见上下文的来源。`deriveMessages()` 从中投影出模型历史，原始 `assistant/chunk` 事件则保证回放和 UI 保真。fork、恢复、transcript（文本记录）、遥测和持久化都派生自该事件流。
 
-**模型可见即已记录。** 抵达模型请求的一切都必须能从日志重建，并由一项运行时不变量断言这一点。因此，新增一项模型可见输入就需要新增一个会话事件：扩展 `SessionEventMap` 并从日志渲染。
+**模型可见即已记录。** 抵达模型请求的一切都必须能从日志重建。可选的[不变量](subsystems/invariants.md)伴生包在开发与测试组合中断言这一点；发布用的 profile 不挂载任何不变量服务，因此生产环境依靠评审和测试来守住该规则。因此，新增一项模型可见输入就需要新增一个会话事件：扩展 `SessionEventMap` 并从日志渲染。
 
 ## 能力 seam
 
 一个 **seam** 是一项可替换能力，包含三种角色：声明接口的 **Service Definition**、实现它的 **Service Provider**，以及使用它的 **Consumer**（通常是面向模型的工具）。一个包可以合并承担多个角色，但单一角色本身不是 seam；添加一项能力意味着把三者一并设计（[能力图](capability-seams.md)）。
 
-seam 正是替换一个提供方就能改变整个产品的原因。文件系统与进程提供方共享同一个执行世界，因此把它们指向远程沙箱，也就把 Bash、PTY 和 LSP 一并搬了过去，无需提供方专用 fork。[subagent 提供方](subsystems/subagent.md)在同一个接口之后同样千差万别，从新建一个子 agent，到把一个轮次委派给另一个产品。
+新增的 Consumer 默认既不经审批也不受限制。没有监听器认领该调用时，`tools/pre-execute` 解析为 `allow`，因此具有真实世界副作用的能力要自行通过该 waterfall、`ctx.tools.guard()` 或某个 sandbox 后端接入自己的关卡。
+
+seam 正是替换一个提供方就能改变该 seam 全部消费方的原因。文件系统与进程提供方共享同一个执行世界，因此把它们指向远程沙箱，也就把 Bash、PTY 和 LSP 一并搬了过去，无需提供方专用 fork。这一替换同时把文件与进程副作用移过了一道进程与网络边界，其信任属性不同于本地世界。目前的远程路径是可选接入的 [E2B POC](../packages/e2b/e2b/README.md)：它只搬迁文件系统与进程世界，harness 进程、模型调用和会话状态仍留在本地，且没有任何发布用 profile 挂载它。[subagent 提供方](subsystems/subagent.md)在同一个接口之后同样千差万别，从新建一个子 agent，到把一个轮次委派给另一个产品。
 
 ## 新行为的归属位置
 
@@ -112,12 +116,16 @@ seam 正是替换一个提供方就能改变整个产品的原因。文件系统
 | 目标 | 机制 |
 |---|---|
 | 添加模型提供方 | 在 `ctx.llm` 上注册其适配器 |
+| 消费密钥 | 通过 `ctx.credentials` 引用；配置只携带引用，绝不携带取值 |
 | 添加面向模型的能力 | 在 `ctx.tools` 上注册；其 schema 加入提示词组装 |
 | 让某个会话拥有不同的能力集合 | 组装一个 agent preset；其中的服务行需要 `isolate` realm |
 | 添加 shell 执行 | 注册 `ctx.shell` 后端；本地后端通过 `ctx.subprocess` spawn 进程 |
 | 添加持久化终端执行 | 注册 `ctx.terminals` 后端和 `dsh-tool-terminal` |
+| 添加语言服务器访问 | 注册 `ctx.lsp` 提供方和 `dsh-tool-lsp` |
+| 添加网页搜索或抓取 | 注册 `ctx.web` 提供方和 `dsh-tool-web` |
 | 添加用户命令 | 在 `ctx.commands` 上注册；它无需模型轮次即可分派 |
 | 添加后台工作 | 在 `ctx.jobs` 上注册；`job_*` 工具负责收集或停止 |
+| 添加工作流执行 | 注册 `ctx.workflowEngine` 后端和 `dsh-tool-workflow` |
 | 添加文件系统访问或策略 | 注册 `ctx.fs` 提供方，或监听 `fs/*` 事件 |
 | 限制所启动的进程 | 使用 `ctx.sandbox` 后端；消费方在启动进程前包装 argv |
 | 拦截请求、工具或轮次 | 使用相应的 `agent/*` 或 `tools/*` 事件；`agent/turn-stopping` 会停止轮次 |

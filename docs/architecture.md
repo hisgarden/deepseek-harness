@@ -8,9 +8,11 @@ We recommend using an agent to explore the codebase and understand its architect
 
 ## Cordis
 
-[Cordis](cordis-primer.md) is the framework under dsh: plugins contribute services, typed events, and reversible effects to a shared context. Every part of the product is a plugin, including the model adapter, the tool registry, the session log, and the agent loop itself, so every part is replaceable from configuration.
+[Cordis](cordis-primer.md) is the framework under dsh: plugins contribute services, typed events, and reversible effects to a shared context. Every part of the product above the boot glue is a plugin, including the model adapter, the tool registry, the session log, and the agent loop itself, so every part is replaceable from configuration.
 
-There is no privileged core to patch: you extend dsh by mounting a plugin beside the others, and registrations are effects that unwind when their plugin unloads.
+You extend dsh by mounting a plugin beside the others, and registrations are effects that unwind when their plugin unloads. Effects reclaim registrations, not external resources: a plugin that owns processes, terminals, worker threads, or remote sandboxes awaits their quiescence in its own disposer ([defensive patterns](defensive-patterns.md)).
+
+The boot glue underneath changes in source rather than configuration: the app bins, `app-boot`'s environment, home, and config resolution with its fail-loud guards, the Cordis Loader with the root `include` and `group` builtins it mounts, and vendored Cordis itself.
 
 ## Profiles and bundles
 
@@ -56,7 +58,7 @@ Events are the extension points, and picking the right domain is the first decis
 
 - **Session events** are durable facts appended to the log and broadcast through `session/event`. Use one when the fact must survive a reload.
 - **Agent events** (`agent/*`) carry a live `Agent`: inbox, step, status, request, validation, continuation. Use one to observe or intercept work in flight.
-- **Capability events** attach policy and adapters to a seam (`fs/*`, `tools/*`, `telemetry/*`) without importing the loop.
+- **Capability events** attach policy and adapters to a seam (`fs/*`, `tools/*`, `session-telemetry/*`) without importing the loop.
 
 The [event map](event-producer-consumer.md) lists every event's producers and consumers.
 
@@ -93,13 +95,15 @@ Details: the [sequence diagram](agent-lifecycle.md), the [tool pipeline](tool-ex
 
 The session log is the source of the context the model sees. `deriveMessages()` projects model history from it, and raw `assistant/chunk` events preserve replay and UI fidelity. Fork, resume, transcripts, telemetry, and persistence all derive from this stream.
 
-**Model-visible means logged.** Anything that reaches a model request must be reconstructable from the log, and a runtime invariant asserts it. This is why a new model-visible input requires a new session event: extend `SessionEventMap` and render from the log.
+**Model-visible means logged.** Anything that reaches a model request must be reconstructable from the log. The optional [invariant](subsystems/invariants.md) companion asserts this in development and test compositions; shipped profiles mount no invariant service, so production holds the rule through review and tests. This is why a new model-visible input requires a new session event: extend `SessionEventMap` and render from the log.
 
 ## Capability seams
 
 A **seam** is a swappable capability with three roles: a **Service Definition** declaring the interface, a **Service Provider** implementing it, and a **Consumer** using it, commonly a model-facing tool. A package may combine roles, but one role alone is not a seam; adding a capability means designing all three ([capability graph](capability-seams.md)).
 
-Seams are why one provider swap changes the whole product. Filesystem and subprocess providers share one execution world, so pointing them at a remote sandbox moves Bash, PTY, and LSP with them, with no provider forks. [Subagent providers](subsystems/subagent.md) vary just as widely behind one interface, from a fresh child agent to a delegated turn in another product.
+A new Consumer runs unapproved and unconfined. `tools/pre-execute` resolves to `allow` when no listener claims the call, so a capability with real-world effects wires its own gate through that waterfall, through `ctx.tools.guard()`, or through a sandbox backend.
+
+Seams are why one provider swap changes every consumer of that seam. Filesystem and subprocess providers share one execution world, so pointing them at a remote sandbox moves Bash, PTY, and LSP with them, with no provider forks. That swap also moves file and process effects across a process and network boundary whose trust properties differ from the local world. The remote path today is the opt-in [E2B POC](../packages/e2b/e2b/README.md): it relocates the filesystem and process world only, the harness process and model calls and session state stay local, and no shipped profile mounts it. [Subagent providers](subsystems/subagent.md) vary just as widely behind one interface, from a fresh child agent to a delegated turn in another product.
 
 ## Where new behavior goes
 
@@ -108,12 +112,16 @@ New behavior attaches to a documented extension point. Changing the loop itself 
 | Goal | Mechanism |
 |---|---|
 | Add a model provider | register its adapter on `ctx.llm` |
+| Consume a secret | reference it through `ctx.credentials`; configuration carries the reference, never the value |
 | Add a model-facing capability | register on `ctx.tools`; its schema joins prompt assembly |
 | Give one session a different capability set | compose an agent preset; a service row there needs an `isolate` realm |
 | Add shell execution | register a `ctx.shell` backend; the local one spawns through `ctx.subprocess` |
 | Add persistent terminal execution | register a `ctx.terminals` backend plus `dsh-tool-terminal` |
+| Add language-server access | register a `ctx.lsp` provider plus `dsh-tool-lsp` |
+| Add web search or fetch | register a `ctx.web` provider plus `dsh-tool-web` |
 | Add a human command | register on `ctx.commands`; it dispatches without a model turn |
 | Add background work | register on `ctx.jobs`; `job_*` tools collect or stop it |
+| Add workflow execution | register a `ctx.workflowEngine` backend plus `dsh-tool-workflow` |
 | Add filesystem access or policy | register a `ctx.fs` provider or listen to `fs/*` events |
 | Confine spawned processes | use a `ctx.sandbox` backend; consumers wrap argv before spawning |
 | Intercept a request, tool, or turn | use its `agent/*` or `tools/*` event; `agent/turn-stopping` stops a turn |
