@@ -31,7 +31,7 @@ const ALL_KINDS = ['dependencies', 'devDependencies', 'optionalDependencies', 'p
  * runtime dependency because any plugin package can be mounted from a user's
  * `cordis.yml`.
  */
-const DEV_ONLY_AREAS = [
+export const DEV_ONLY_AREAS = [
   'package.json',
   'packages/test-support/',
   'packages/test-support/client-runtime/',

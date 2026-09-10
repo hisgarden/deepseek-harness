@@ -120,6 +120,7 @@ External packages **directly declared** only by repository tooling, test infrast
 | Package | License |
 | --- | --- |
 | [`@braintree/sanitize-url`](https://github.com/braintree/sanitize-url) | MIT |
+| [`@cyclonedx/cyclonedx-library`](https://github.com/CycloneDX/cyclonedx-javascript-library) | Apache-2.0 |
 | [`@modelcontextprotocol/server-everything`](https://github.com/modelcontextprotocol/servers) | MIT / Apache-2.0 |
 | [`@modelcontextprotocol/server-filesystem`](https://github.com/modelcontextprotocol/servers) | MIT / Apache-2.0 |
 | [`@openai/codex`](https://github.com/openai/codex) | Apache-2.0 |
@@ -139,6 +140,9 @@ External packages **directly declared** only by repository tooling, test infrast
 | [`@vitejs/plugin-react`](https://github.com/vitejs/vite-plugin-react) | MIT |
 | [`@vitest/coverage-v8`](https://github.com/vitest-dev/vitest) | MIT |
 | [`@yarnpkg/cli-dist`](https://github.com/yarnpkg/berry) | BSD-2-Clause |
+| [`ajv`](https://github.com/ajv-validator/ajv) | MIT |
+| [`ajv-formats`](https://github.com/ajv-validator/ajv-formats) | MIT |
+| [`ajv-formats-draft2019`](https://github.com/luzlab/ajv-formats-draft2019) | MIT |
 | [`cytoscape`](https://github.com/cytoscape/cytoscape.js) | MIT |
 | [`cytoscape-cose-bilkent`](https://github.com/cytoscape/cytoscape.js-cose-bilkent) | MIT |
 | [`dayjs`](https://github.com/iamkun/dayjs) | MIT |
@@ -157,6 +161,7 @@ External packages **directly declared** only by repository tooling, test infrast
 | [`mermaid`](https://github.com/mermaid-js/mermaid) | MIT |
 | [`oxlint`](https://github.com/oxc-project/oxc) | MIT |
 | [`oxlint-tsgolint`](https://github.com/oxc-project/tsgolint) | MIT |
+| [`packageurl-js`](https://github.com/package-url/packageurl-js) | MIT |
 | [`playwright`](https://github.com/microsoft/playwright) | Apache-2.0 |
 | [`publint`](https://github.com/publint/publint) | MIT |
 | [`smol-toml`](https://github.com/squirrelchat/smol-toml) | BSD-3-Clause |

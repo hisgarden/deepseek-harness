@@ -575,6 +575,7 @@ function hygieneLeafGates(options: { artifactNeeds?: string[] } = {}): Gate[] {
     pnpmScript('publint', 'publint', artifactOptions),
     pnpmScript('constraints', 'constraints'),
     pnpmScript('dsh-package-licenses', 'verify-dsh-package-licenses', { label: 'DSH package licenses' }),
+    pnpmScript('sbom', 'verify-sbom', { label: 'SBOM' }),
     pnpmScript('package-invariants', 'verify-package-invariants', { label: 'package invariants' }),
     builtPackageInvariantsGate(options.artifactNeeds),
     pnpmScript('node-next-types', 'verify-node-next-types', {
