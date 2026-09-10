@@ -6,7 +6,7 @@
  * `.agents/notes/implemented/process/2026-07-02-tool-schema-catalog.md`.
  */
 
-import { globSync, readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { Context } from '@deepseek-ai/cordis'
 import type { ToolSchema } from '@deepseek-ai/dsh-llm'
@@ -64,6 +64,7 @@ import VmWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
 import * as ToolRalph from '@deepseek-ai/dsh-tool-ralph'
 import * as ToolWorkflow from '@deepseek-ai/dsh-tool-workflow'
 import { githubSlug } from './verify-md-links.ts'
+import { globSync } from './glob.ts'
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
 class CatalogAttachmentStore extends AttachmentStore {

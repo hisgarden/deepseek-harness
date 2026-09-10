@@ -8,11 +8,12 @@
  * `.agents/notes/implemented/process/2026-07-30-generated-third-party-notices.md`.
  */
 
-import { existsSync, globSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import * as yaml from 'js-yaml'
 import { parse as parseToml, type TomlTableWithoutBigInt, type TomlValueWithoutBigInt } from 'smol-toml'
 import parseSpdx from 'spdx-expression-parse'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const OUT = 'THIRD_PARTY_NOTICES.md'

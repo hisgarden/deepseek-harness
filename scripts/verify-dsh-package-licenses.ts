@@ -3,8 +3,9 @@
  * @module scripts/verify-dsh-package-licenses
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 
 const ROOT = resolve(import.meta.dirname, '..')
 const DSH_PACKAGE_NAME = /^@deepseek-ai\/dsh(?:-|$)/

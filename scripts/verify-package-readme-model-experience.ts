@@ -5,9 +5,10 @@
  * [Model Experience Agent Note](../.agents/notes/implemented/process/2026-07-12-package-model-experience-contract.md).
  */
 
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { relative, resolve, sep } from 'node:path'
 import { markdownHeadingLines, markdownProseLines, type MarkdownProseLine } from './markdown.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const HEADING = '## Model Experience'

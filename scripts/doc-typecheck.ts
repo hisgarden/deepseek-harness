@@ -6,13 +6,14 @@
  */
 
 import { execFileSync } from 'node:child_process'
-import { globSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join, relative, resolve } from 'node:path'
 import ts from 'typescript'
 import { builtDeclarationPath } from './doc-typecheck-paths.ts'
 import { markdownFences } from './markdown.ts'
 import { partitionPairedMarkdownDerivatives } from './paired-markdown-derivatives.ts'
 import { isArchivedAgentNotePath } from './repo-files.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

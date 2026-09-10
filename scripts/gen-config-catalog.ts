@@ -7,12 +7,13 @@
  * the committed artifact.
  */
 
-import { globSync, readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve, sep } from 'node:path'
 import ts from 'typescript'
 import { LINK_MAP } from './gen-cordis-catalog.ts'
 import { parseJsDoc, pointer, rawJsDoc } from './jsdoc.ts'
 import { githubSlug } from './verify-md-links.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const OUT = 'docs/config-catalog.md'

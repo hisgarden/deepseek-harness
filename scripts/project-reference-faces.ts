@@ -1,8 +1,9 @@
 /** Validate compiler-face isolation across workspace Project Reference graphs. */
 
-import { existsSync, globSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { basename, dirname, isAbsolute, relative, resolve, sep } from 'node:path'
 import ts from 'typescript'
+import { globSync } from './glob.ts'
 
 type ProjectFace = 'host' | 'client'
 

@@ -10,11 +10,12 @@
  * packages must also be in the root TypeScript project graph.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, relative, resolve } from 'node:path'
 import * as yaml from 'js-yaml'
 import ts from 'typescript'
 import { cordisConfigFiles } from './cordis-config-files.ts'
+import { globSync } from './glob.ts'
 
 interface JsExpr {
   __jsExpr: string

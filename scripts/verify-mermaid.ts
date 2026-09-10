@@ -4,7 +4,7 @@
  * package/example docs, and agent skills. Run with `tsx scripts/verify-mermaid.ts`.
  */
 
-import { globSync, readFileSync, realpathSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { gfmFromMarkdown } from 'mdast-util-gfm'
@@ -12,6 +12,7 @@ import { gfm } from 'micromark-extension-gfm'
 import { JSDOM } from 'jsdom'
 import type { Nodes } from 'mdast'
 import { isArchivedAgentNotePath } from './repo-files.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

@@ -5,9 +5,10 @@
  * See the [limitations Agent Note](../.agents/notes/implemented/process/2026-07-10-readme-known-limitations-gate.md).
  */
 
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 import { markdownHeadingLines, markdownProseLines } from './markdown.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

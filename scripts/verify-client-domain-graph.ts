@@ -14,8 +14,9 @@
  *   pnpm exec tsx scripts/verify-client-domain-graph.ts
  */
 
-import { globSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const CLIENT_DIR = join(root, 'packages/client')

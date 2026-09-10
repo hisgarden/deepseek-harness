@@ -3,10 +3,10 @@
  * peer in its dependency graph. With auto peer installation disabled, a missing
  * root peer can otherwise fail only when Cordis loads the packaged plugin.
  */
-import { globSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parseArgs } from 'node:util'
+import { globSync } from './glob.ts'
 
 interface PackageManifest {
   name?: string

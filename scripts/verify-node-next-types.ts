@@ -7,8 +7,9 @@
  */
 
 import { execFileSync } from 'node:child_process'
-import { existsSync, globSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

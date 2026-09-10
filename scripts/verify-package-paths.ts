@@ -5,8 +5,9 @@
  * packages, and unbuilt `lib/` output are outside the check.
  */
 
-import { existsSync, globSync } from 'node:fs'
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { globSync } from './glob.ts'
 import {
   findReferenceViolations,
   isArchivedAgentNotePath,

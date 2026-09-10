@@ -9,9 +9,10 @@
  * `releaseFamilies()` entry; nothing else in the release scripts branches on it.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { validateTarballPayload } from '../publication-payload.ts'
+import { globSync } from '../glob.ts'
 
 /**
  * Dependency sections a consumer must publish after, because npm resolves them

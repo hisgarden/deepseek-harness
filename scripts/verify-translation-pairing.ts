@@ -10,9 +10,10 @@
  * See `docs/i18n/README.md` for the owning contract.
  */
 
-import { existsSync, globSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join, resolve, sep } from 'node:path'
 import { gitBlobHash, readGitIndexBlob, storeGitBlob } from './translation-pairing-git.ts'
+import { globSync } from './glob.ts'
 import {
   parseTranslationPairingRecord,
   renderTranslationPairingRecord,

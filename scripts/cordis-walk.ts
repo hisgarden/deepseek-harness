@@ -5,9 +5,10 @@
  * region generator's exhaustiveness backstop consumes the key scan.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 import ts from 'typescript'
+import { globSync } from './glob.ts'
 
 /** Cheap textual prefilter for a cordis module merge, quote-style agnostic
  * (the AST match below reads `stmt.name.text` and never sees the quotes). */

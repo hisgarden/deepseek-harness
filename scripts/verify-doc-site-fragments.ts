@@ -7,9 +7,10 @@
  * with `tsx scripts/verify-doc-site-fragments.ts`.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 import { JSDOM } from 'jsdom'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

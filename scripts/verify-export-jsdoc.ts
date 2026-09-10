@@ -7,10 +7,11 @@
  * re-exports keep their docs at the declaring contract. Unknown forms fail closed.
  */
 
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { relative, resolve, sep } from 'node:path'
 import ts from 'typescript'
 import { checkParams, checkReturns, parseJsDoc, parseTags, pointer, rawJsDoc } from './jsdoc.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

@@ -5,8 +5,9 @@
  * priorities; manifest parsing and dependency-safe ordering have one owner.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 
 const SCOPE = '@deepseek-ai/dsh-'
 

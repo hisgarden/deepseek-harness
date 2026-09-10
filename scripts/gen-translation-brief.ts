@@ -12,9 +12,10 @@
  */
 
 import { spawnSync } from 'node:child_process'
-import { existsSync, globSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, join, resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 import {
   isTranslationScopeFile,
   pairAnchorOfArgument,

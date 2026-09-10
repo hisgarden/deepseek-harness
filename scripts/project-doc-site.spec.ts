@@ -1,7 +1,8 @@
 /** Tests for the documentation website projection adapter. */
 
 import { execFileSync } from 'node:child_process'
-import { existsSync, globSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { globSync } from './glob.ts'
 import { tmpdir } from 'node:os'
 import { basename, join, resolve } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'

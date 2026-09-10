@@ -1,6 +1,6 @@
 /** Cordis Loader configuration file discovery. */
 
-import { globSync } from 'node:fs'
+import { globSync } from './glob.ts'
 
 /**
  * Return repository-relative Cordis Loader YAML paths under `root`.

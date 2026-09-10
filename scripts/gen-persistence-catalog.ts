@@ -6,11 +6,12 @@
  * surface-union member must resolve to one. `--check` verifies the artifact.
  */
 
-import { globSync, readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 import ts from 'typescript'
 import { parseJsDoc, pointer, rawJsDoc, reportViolations } from './jsdoc.ts'
 import { githubSlug } from './verify-md-links.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 const OUT = 'docs/persistence-catalog.md'

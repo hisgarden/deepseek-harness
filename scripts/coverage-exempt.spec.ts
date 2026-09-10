@@ -5,7 +5,7 @@
  * the uninstrumented gate while its exclude goes stale.
  */
 
-import { globSync } from 'node:fs'
+import { globSync } from './glob.ts'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { coverageExemptHeavySuites } from './coverage-exempt.ts'

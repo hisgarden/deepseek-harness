@@ -8,12 +8,13 @@
  * reuse the manifest-backed check of their unsuffixed sibling.
  */
 
-import { globSync, readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
 import ts from 'typescript'
 import { markdownFences } from './markdown.ts'
 import { partitionPairedMarkdownDerivatives } from './paired-markdown-derivatives.ts'
 import { isArchivedAgentNotePath } from './repo-files.ts'
+import { globSync } from './glob.ts'
 
 const root = resolve(import.meta.dirname, '..')
 

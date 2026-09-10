@@ -4,9 +4,10 @@
  * exhaustive across packages without centralizing package checks.
  */
 
-import { existsSync, globSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { dirname, relative, resolve, sep } from 'node:path'
 import ts from 'typescript'
+import { globSync } from './glob.ts'
 
 /** Required explanation marker for an intentionally empty installer. */
 const NO_RUNTIME_INVARIANT_MARKER = 'No runtime invariant:'

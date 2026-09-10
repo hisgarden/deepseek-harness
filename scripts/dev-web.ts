@@ -17,11 +17,12 @@
  * `watch` through API-level inline config (tsdown workspace mode fills inline
  * keys under each package's file config, and no package config defines it).
  */
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, join, resolve, sep } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { build } from 'tsdown'
 import type { TsdownBundle } from 'tsdown'
+import { globSync } from './glob.ts'
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 

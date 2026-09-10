@@ -3,8 +3,9 @@
  * sets are closed under `.agents/notes/README.md`; importing this module is pure.
  */
 
-import { globSync, readdirSync } from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 
 export const agentNoteRoot = resolve(import.meta.dirname, '../.agents/notes')
 

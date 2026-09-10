@@ -1,0 +1,6 @@
+# Bilingual-pair consistency record (docs/i18n/README.md): the git blob hash of each
+# side as of the last confirmed-consistent state. Both languages carry equal authority;
+# after editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write .agents/notes/implemented/process/2026-08-20-runtime-independent-gate-globbing.md
+2026-08-20-runtime-independent-gate-globbing.md: 0a3b2edab6214aeda19f1a999b17a2fc30cfcc42
+2026-08-20-runtime-independent-gate-globbing.zh.md: 05ee12df816b29763c4b78e8dbd9e0228676b8fd

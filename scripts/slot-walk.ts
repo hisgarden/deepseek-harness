@@ -7,9 +7,10 @@
  * reachable-export closure.
  */
 
-import { globSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { dirname, join, resolve, sep } from 'node:path'
 import ts from 'typescript'
+import { globSync } from './glob.ts'
 
 /** The module whose `SlotMap` / standard-kit interfaces every slot owner merges into. */
 const SLOTS_MODULE = '@deepseek-ai/dsh-client-ui-slots'

@@ -2,23 +2,14 @@
 
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process'
 import { createHash } from 'node:crypto'
-import {
-  existsSync,
-  globSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  realpathSync,
-  readdirSync,
-  rmSync,
-  writeFileSync,
-} from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { basename, dirname, isAbsolute, join, normalize, relative, resolve, sep } from 'node:path'
 import { createInterface } from 'node:readline/promises'
 import { pathToFileURL } from 'node:url'
 import { parseArgs } from 'node:util'
 import { validateTarballPayload } from './publication-payload.ts'
+import { globSync } from './glob.ts'
 
 const DEFAULT_REGISTRY = 'https://registry.npm.harnessment.com'
 const DEFAULT_OUTPUT_DIRECTORY = '.artifacts/npm-baseline'

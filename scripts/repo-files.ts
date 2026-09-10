@@ -1,7 +1,8 @@
 /** Shared repository file discovery and line-oriented reference scanning. */
 
-import { globSync, readFileSync, realpathSync } from 'node:fs'
+import { readFileSync, realpathSync } from 'node:fs'
 import { relative, resolve, sep } from 'node:path'
+import { globSync } from './glob.ts'
 
 /** One authored path plus its canonical target for symlink deduplication. */
 export interface RepoFile {

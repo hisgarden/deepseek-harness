@@ -1,16 +1,12 @@
 /** Run publint over the exact manifest-declared publication view of every package. */
 
-import {
-  globSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from 'node:fs'
+import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { availableParallelism } from 'node:os'
 import { dirname, relative, resolve, sep } from 'node:path'
 import { parseArgs } from 'node:util'
 import { publint, type Message, type PackFile } from 'publint'
 import { formatMessage } from 'publint/utils'
+import { globSync } from './glob.ts'
 
 const CONCURRENCY_ENV = 'DSH_PUBLINT_CONCURRENCY'
 const repositoryRoot = resolve(import.meta.dirname, '..')
